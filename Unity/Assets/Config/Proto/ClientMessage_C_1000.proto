@@ -19,3 +19,15 @@ message NetClient2Main_Login // IResponse
 
 	int64 PlayerId = 4;
 }
+// ResponseType M2C_AddNum
+message C2M_AddNum  // ISessionRequest
+{
+	int32 RpcId = 1;
+}
+
+message M2C_AddNum //ISessionResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}

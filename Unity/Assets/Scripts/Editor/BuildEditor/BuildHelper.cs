@@ -30,6 +30,21 @@ namespace ET
             EnableDefineSymbols("ENABLE_VIEW", true);
         }
 #endif
+
+#if UNITY_COMPILE
+        [MenuItem("ET/ChangeDefine/Remove UNITY_COMPILE", false, ETMenuItemPriority.ChangeDefine)]
+        public static void RemoveEnableUnityCompile()
+        {
+            EnableDefineSymbols("UNITY_COMPILE", false);
+        }
+#else
+        [MenuItem("ET/ChangeDefine/Add UNITY_COMPILE", false, ETMenuItemPriority.ChangeDefine)]
+        public static void AddUnityCompile()
+        {
+            EnableDefineSymbols("UNITY_COMPILE", true);
+        }
+#endif
+
         public static void EnableDefineSymbols(string symbols, bool enable)
         {
             Debug.Log($"EnableDefineSymbols {symbols} {enable}");

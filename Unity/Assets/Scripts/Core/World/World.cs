@@ -5,6 +5,7 @@ namespace ET
 {
     public class World: IDisposable
     {
+        public Scene Scene;
         [StaticField]
         private static World instance;
 
@@ -26,6 +27,7 @@ namespace ET
         
         public void Dispose()
         {
+            Scene = null;
             instance = null;
             
             lock (this)

@@ -130,7 +130,8 @@ namespace ET
             SynchronizationContext.SetSynchronizationContext(unitySynchronizationContext);
 
             bool isCompileOk = false;
-
+            //UNITY_COMPILE 导致无法在打包时被便宜
+            //UNITY_EDITOR 确保在编辑器下能被编译
             try
             {
                 Directory.CreateDirectory(Define.BuildOutputDir);

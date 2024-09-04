@@ -16,6 +16,7 @@ namespace ET
         
         Demo,
         LockStep,
+        Test,
     }
     
     public class Options: Singleton<Options>

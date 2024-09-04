@@ -84,9 +84,70 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(ClientMessage.C2M_AddNum)]
+    [ResponseType(nameof(M2C_AddNum))]
+    public partial class C2M_AddNum : MessageObject, ISessionRequest
+    {
+        public static C2M_AddNum Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(C2M_AddNum), isFromPool) as C2M_AddNum;
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(ClientMessage.M2C_AddNum)]
+    public partial class M2C_AddNum : MessageObject, ISessionResponse
+    {
+        public static M2C_AddNum Create(bool isFromPool = false)
+        {
+            return ObjectPool.Instance.Fetch(typeof(M2C_AddNum), isFromPool) as M2C_AddNum;
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Instance.Recycle(this);
+        }
+    }
+
     public static class ClientMessage
     {
         public const ushort Main2NetClient_Login = 1001;
         public const ushort NetClient2Main_Login = 1002;
+        public const ushort C2M_AddNum = 1003;
+        public const ushort M2C_AddNum = 1004;
     }
 }

@@ -11,7 +11,7 @@ namespace ET
     {
         private Assembly modelAssembly;
         private Assembly modelViewAssembly;
-
+        private Assembly assemblyCSharp;
         private Dictionary<string, TextAsset> dlls;
         private Dictionary<string, TextAsset> aotDlls;
         private bool enableDll;
@@ -88,13 +88,26 @@ namespace ET
                     }
                 }
             }
-            
+
+            if (!this.enableDll)
+            {
+                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (Assembly ass in assemblies)
+                {
+                    string name = ass.GetName().Name;
+                    if (name == "Assembly-CSharp")
+                    {
+                        this.assemblyCSharp = ass;
+                    }
+                }
+            }
+
             (Assembly hotfixAssembly, Assembly hotfixViewAssembly) = this.LoadHotfix();
 
             World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
             {
                 typeof (World).Assembly, typeof (Init).Assembly, this.modelAssembly, this.modelViewAssembly, hotfixAssembly,
-                hotfixViewAssembly
+                hotfixViewAssembly,assemblyCSharp
             });
 
             IStaticMethod start = new StaticMethod(this.modelAssembly, "ET.Entry", "Start");
@@ -167,7 +180,7 @@ namespace ET
             CodeTypes codeTypes = World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
             {
                 typeof (World).Assembly, typeof (Init).Assembly, this.modelAssembly, this.modelViewAssembly, hotfixAssembly,
-                hotfixViewAssembly
+                hotfixViewAssembly,assemblyCSharp
             });
             codeTypes.CreateCode();
 
